@@ -1,29 +1,43 @@
 # Deep Chat - Real-time Chat Application
 
-A real-time chat application built with Spring Boot, WebSockets, and PostgreSQL.
+🔗 **Live Demo:** [https://chat-app-12d1b.web.app](https://chat-app-12d1b.web.app)
+
+A modern real-time chat application built with Firebase (Authentication, Firestore, Hosting).
 
 ## Features
 
-- 🔐 User authentication (login/register/logout)
-- 💬 Real-time messaging with WebSockets
-- 📢 Multiple chat channels (General, Random, Dev)
-- 👥 User status tracking (Online/Offline)
-- 🎨 Modern dark theme UI
+- 🔐 **User Authentication**
+  - Email/Password sign-in
+  - Google Sign-In
+  - Secure logout
+- 💬 **Real-time Messaging** with Firestore
+- 📢 **Multiple Chat Channels** (General, Random, Dev)
+- 👥 **Online Users** tracking
+- 🎨 **Modern Dark Theme** UI
+- 📱 **Responsive Design**
+- ⚡ **Offline Support** with Firestore persistence
 
 ## Tech Stack
 
-- **Backend:** Spring Boot 3.2, Spring Security, Spring WebSocket
-- **Database:** PostgreSQL
-- **Frontend:** HTML, CSS, JavaScript, SockJS, STOMP
+- **Frontend:** HTML5, CSS3, JavaScript (ES6+)
+- **Backend:** Firebase (Serverless)
+  - Firebase Authentication
+  - Cloud Firestore (Real-time Database)
+  - Firebase Hosting
+- **UI:** Custom CSS with CSS Variables
 
-## Local Development
+## Live Demo
+
+Visit the live app: **[https://chat-app-12d1b.web.app](https://chat-app-12d1b.web.app)**
+
+## Getting Started
 
 ### Prerequisites
-- Java 21
-- Maven
-- PostgreSQL
+- Node.js (for Firebase CLI)
+- Firebase CLI (`npm install -g firebase-tools`)
+- A Firebase project
 
-### Setup
+### Local Development
 
 1. Clone the repository:
 ```bash
@@ -31,60 +45,117 @@ git clone https://github.com/sujan58/Chat_app.git
 cd Chat_app
 ```
 
-2. Configure database in `src/main/resources/application.properties` or set environment variables:
-```properties
-DATABASE_URL=jdbc:postgresql://localhost:5432/your_database
-DATABASE_USERNAME=your_username
-DATABASE_PASSWORD=your_password
-```
-
-3. Run the application:
+2. Install Firebase CLI (if not already installed):
 ```bash
-mvn spring-boot:run
+npm install -g firebase-tools
 ```
 
-4. Open http://localhost:8080 in your browser
+3. Login to Firebase:
+```bash
+firebase login
+```
 
-### Default Users
-- `admin` / `admin`
-- `user` / `user`
+4. Start local development server:
+```bash
+firebase serve
+```
+
+5. Open http://localhost:5000 in your browser
+
+### Firebase Setup
+
+1. Create a new Firebase project at [Firebase Console](https://console.firebase.google.com)
+
+2. Enable Authentication:
+   - Go to **Authentication** → **Sign-in method**
+   - Enable **Email/Password**
+   - Enable **Google**
+
+3. Create Firestore Database:
+   - Go to **Firestore Database**
+   - Click **Create database**
+   - Start in **production mode**
+
+4. Update Firebase config in `src/main/resources/static/js/firebase-config.js`:
+```javascript
+const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT.firebaseapp.com",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_PROJECT.appspot.com",
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId: "YOUR_APP_ID"
+};
+```
 
 ## Deployment
 
-### Deploy to Railway
+### Deploy to Firebase Hosting
 
-1. Go to [Railway](https://railway.app)
-2. Click "New Project" → "Deploy from GitHub repo"
-3. Select this repository
-4. Add a PostgreSQL database from the Railway dashboard
-5. Railway will auto-detect the Java app and deploy it
+```bash
+firebase deploy
+```
 
-### Deploy to Render
+This deploys:
+- Static files to Firebase Hosting
+- Firestore security rules
 
-1. Go to [Render](https://render.com)
-2. Create a new "Web Service"
-3. Connect your GitHub repository
-4. Set environment variables:
-   - `DATABASE_URL`
-   - `DATABASE_USERNAME`
-   - `DATABASE_PASSWORD`
-5. Deploy!
+### Firebase Configuration Files
 
-### Environment Variables
+| File | Description |
+|------|-------------|
+| `firebase.json` | Firebase project configuration |
+| `firestore.rules` | Firestore security rules |
+| `firestore.indexes.json` | Firestore indexes |
+| `.firebaserc` | Firebase project alias |
 
-| Variable | Description |
-|----------|-------------|
-| `PORT` | Server port (default: 8080) |
-| `DATABASE_URL` | PostgreSQL JDBC URL |
-| `DATABASE_USERNAME` | Database username |
-| `DATABASE_PASSWORD` | Database password |
+## Project Structure
+
+```
+Chat_application/
+├── src/main/resources/static/
+│   ├── index.html          # Main app HTML
+│   ├── css/
+│   │   └── style.css       # Styles
+│   └── js/
+│       ├── firebase-config.js  # Firebase configuration
+│       └── firebase-app.js     # App logic
+├── firebase.json           # Firebase config
+├── firestore.rules         # Security rules
+└── README.md
+```
+
+## Security Rules
+
+Firestore security rules ensure:
+- Only authenticated users can read/write
+- Users can only modify their own profiles
+- Messages are validated before saving
 
 ## Testing Multiple Users
 
 To test with different users simultaneously:
 - Use an **incognito/private window** for the second user
 - Or use a **different browser**
+- Each session requires separate login
+
+## Troubleshooting
+
+### "auth/configuration-not-found" Error
+1. Go to Firebase Console → Authentication → Sign-in method
+2. Enable Email/Password provider
+3. Enable Google provider
+4. Save changes
+
+### Messages not showing
+1. Check Firestore Database is created
+2. Verify security rules are deployed
+3. Check browser console for errors
 
 ## License
 
 MIT
+
+## Author
+
+Created by [Sujan](https://github.com/sujan58)

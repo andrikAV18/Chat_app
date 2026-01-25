@@ -319,3 +319,95 @@ button.send-btn:hover {
     font-size: 0.75rem;
     color: var(--online-color);
 }
+
+/* Google Sign In Button */
+.google-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: #fff;
+    color: #333;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+}
+
+.google-btn:hover {
+    background-color: #f5f5f5;
+}
+
+/* Online Users List */
+.online-users {
+    margin-top: auto;
+    padding-top: 1rem;
+    border-top: 1px solid var(--bg-tertiary);
+}
+
+.online-users h3 {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-bottom: 10px;
+}
+
+.online-user {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 10px;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.status-dot.online {
+    background-color: var(--online-color);
+}
+
+.status-dot.offline {
+    background-color: var(--offline-color);
+}
+
+.status-dot.away {
+    background-color: #ffc107;
+}
+
+/* System Messages */
+.system-message {
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    padding: 5px;
+    margin: 10px 0;
+}
+
+/* Avatar Image */
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    background-color: var(--primary-light);
+}
+
+/* Alert info style */
+.alert-info {
+    background-color: rgba(33, 150, 243, 0.2);
+    color: #2196F3;
+    border: 1px solid rgba(33, 150, 243, 0.3);
+}
+
+/* Login container adjustments for Firebase */
+.login-container {
+    max-width: 400px;
+    width: 90%;
+}

@@ -6,28 +6,73 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Deep Chat</title>
     <link rel="stylesheet" href="css/style.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 </head>
 
 <body>
-    <div id="app-container">
+    <!-- Login Container -->
+    <div class="login-container" id="login-container">
+        <h2>Deep Chat</h2>
+        <div id="message-box"></div>
+        
+        <!-- Login Form -->
+        <form class="login-form" id="login-form">
+            <input type="email" id="login-email" placeholder="Email" required autocomplete="email">
+            <input type="password" id="login-password" placeholder="Password" required>
+            <button type="submit" class="login-btn">Sign In</button>
+        </form>
+        
+        <!-- Register Form (hidden by default) -->
+        <form class="login-form" id="register-form" style="display: none;">
+            <input type="text" id="register-username" placeholder="Username" required autocomplete="off">
+            <input type="email" id="register-email" placeholder="Email" required autocomplete="email">
+            <input type="password" id="register-password" placeholder="Password" required>
+            <button type="submit" class="login-btn">Create Account</button>
+        </form>
+        
+        <p style="margin-top: 15px; font-size: 0.85rem; color: #888;">
+            <span id="toggle-auth">
+                Don't have an account? <a href="#" id="show-register" style="color: var(--primary-light); text-decoration: none;">Register here</a>
+            </span>
+        </p>
+        
+        <!-- Google Sign In -->
+        <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #333;">
+            <button type="button" class="google-btn" id="google-signin">
+                <svg width="18" height="18" viewBox="0 0 18 18" style="margin-right: 8px;">
+                    <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"></path>
+                    <path fill="#34A853" d="M9.003 18c2.43 0 4.467-.806 5.956-2.18l-2.909-2.26c-.806.54-1.836.86-3.047.86-2.344 0-4.328-1.584-5.036-3.711H.96v2.332C2.44 15.983 5.485 18 9.003 18z"></path>
+                    <path fill="#FBBC05" d="M3.964 10.712c-.18-.54-.282-1.117-.282-1.71 0-.593.102-1.17.282-1.71V4.96H.957C.347 6.175 0 7.55 0 9.002c0 1.452.348 2.827.957 4.042l3.007-2.332z"></path>
+                    <path fill="#EA4335" d="M9.003 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.464.891 11.428 0 9.002 0 5.485 0 2.44 2.017.96 4.958L3.967 7.29c.708-2.127 2.692-3.71 5.036-3.71z"></path>
+                </svg>
+                Sign in with Google
+            </button>
+        </div>
+    </div>
+
+    <!-- Chat Container (hidden by default) -->
+    <div id="app-container" style="display: none;">
         <div class="sidebar">
             <div class="profile-section">
-                <div class="avatar" id="current-user-avatar"></div>
+                <img class="avatar" id="current-user-avatar" src="" alt="Avatar">
                 <div class="user-info">
                     <div class="username" id="current-username">Loading...</div>
                     <span class="user-status">Online</span>
                 </div>
-                <form action="/logout" method="post" class="logout-form">
-                    <button type="submit" class="logout-btn" title="Logout (Sign out)">⏻</button>
-                </form>
+                <button type="button" class="logout-btn" id="logout-btn" title="Logout">⏻</button>
             </div>
             <div class="channels-list">
                 <h3>Channels</h3>
-                <div class="channel-item active" onclick="switchChannel('general')"># General</div>
-                <div class="channel-item" onclick="switchChannel('random')"># Random</div>
-                <div class="channel-item" onclick="switchChannel('dev')"># Dev</div>
+                <div class="channel-item active" data-channel="general"># General</div>
+                <div class="channel-item" data-channel="random"># Random</div>
+                <div class="channel-item" data-channel="dev"># Dev</div>
+            </div>
+            <div class="online-users">
+                <h3>Online Users</h3>
+                <div id="online-users-list"></div>
             </div>
         </div>
 
@@ -43,11 +88,13 @@
 
             <div class="chat-input-area">
                 <input type="text" id="message-input" placeholder="Type a message...">
-                <button class="send-btn" onclick="sendMessage()">➤</button>
+                <button class="send-btn" id="send-btn">➤</button>
             </div>
         </div>
     </div>
-    <script src="js/main.js"></script>
+
+    <script src="js/firebase-config.js"></script>
+    <script src="js/firebase-app.js"></script>
 </body>
 
 </html>
