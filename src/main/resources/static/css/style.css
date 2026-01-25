@@ -19,24 +19,39 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+}
+
+html {
+    width: 100%;
+    height: 100%;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 body {
     background-color: var(--bg-color);
     color: var(--text-primary);
+    width: 100%;
+    height: 100%;
     height: 100vh;
+    max-height: 100vh;
     overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-size-adjust: 100%;
+    position: fixed;
 }
 
 #app-container {
     display: flex;
     width: 100%;
     height: 100%;
-    max-width: 1400px;
+    max-width: 100%;
     background-color: var(--bg-secondary);
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
     overflow: hidden;
@@ -177,6 +192,10 @@ input[type="text"] {
     background-color: var(--bg-tertiary);
     color: var(--text-primary);
     outline: none;
+    font-size: 16px;
+    -webkit-appearance: none;
+    appearance: none;
+    min-height: 44px;
 }
 
 button.send-btn {
@@ -190,6 +209,11 @@ button.send-btn {
     display: flex;
     align-items: center;
     justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+    flex-shrink: 0;
+    -webkit-appearance: none;
+    appearance: none;
 }
 
 button.send-btn:hover {
@@ -204,12 +228,17 @@ button.send-btn:hover {
     border-radius: var(--border-radius);
     box-shadow: 0 0 20px rgba(123, 31, 162, 0.3);
     width: 350px;
+    max-width: 90%;
     text-align: center;
+    max-height: 90vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 .login-container h2 {
     color: var(--primary-light);
     margin-bottom: 2rem;
+    font-size: 1.8rem;
 }
 
 .login-form input {
@@ -221,6 +250,10 @@ button.send-btn:hover {
     border-radius: 20px;
     color: var(--text-primary);
     outline: none;
+    font-size: 16px;
+    -webkit-appearance: none;
+    appearance: none;
+    min-height: 44px;
 }
 
 .login-btn {
@@ -232,17 +265,33 @@ button.send-btn:hover {
     border-radius: 20px;
     cursor: pointer;
     font-weight: bold;
+    font-size: 0.95rem;
+    min-height: 44px;
+    -webkit-appearance: none;
+    appearance: none;
 }
 
 /* Responsive */
 @media (max-width: 768px) {
+    html, body {
+        width: 100%;
+        height: 100%;
+        max-height: 100vh;
+        overflow: hidden;
+        position: fixed;
+    }
+
     body {
-        height: 100dvh; /* Dynamic viewport height for mobile */
+        height: 100vh;
+        height: 100dvh;
     }
 
     #app-container {
         flex-direction: column;
         position: relative;
+        width: 100%;
+        height: 100%;
+        max-height: 100vh;
     }
 
     /* Mobile Sidebar - Slide-in Menu */
@@ -252,10 +301,13 @@ button.send-btn:hover {
         left: -280px;
         width: 280px;
         height: 100%;
+        max-height: 100vh;
         z-index: 1000;
         transition: left 0.3s ease;
         padding: 1rem;
         border-right: 1px solid var(--bg-tertiary);
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
     }
 
     .sidebar.open {
@@ -282,6 +334,10 @@ button.send-btn:hover {
     .chat-header {
         padding: 0.75rem 1rem;
         font-size: 1rem;
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
     }
 
     .menu-btn {
@@ -291,46 +347,71 @@ button.send-btn:hover {
         color: var(--text-primary);
         font-size: 1.5rem;
         cursor: pointer;
-        padding: 5px;
+        padding: 8px;
         margin-right: 10px;
+        min-width: 44px;
+        min-height: 44px;
+        align-items: center;
+        justify-content: center;
+        -webkit-user-select: none;
+        user-select: none;
+        flex-shrink: 0;
     }
 
     /* Chat Area Full Width */
     .chat-area {
         width: 100%;
         height: 100%;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
     }
 
     /* Messages */
     .chat-messages {
         padding: 0.75rem;
         gap: 0.75rem;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        flex: 1;
     }
 
     .message {
         max-width: 85%;
+        word-wrap: break-word;
+        word-break: break-word;
     }
 
     .message-content {
         padding: 8px 12px;
         font-size: 0.9rem;
+        line-height: 1.4;
     }
 
     /* Input Area */
     .chat-input-area {
         padding: 0.75rem;
         gap: 8px;
+        background-color: var(--bg-secondary);
+        flex-shrink: 0;
+        min-height: 44px;
+        display: flex;
+        align-items: center;
     }
 
     input[type="text"] {
         padding: 10px 15px;
-        font-size: 16px; /* Prevents zoom on iOS */
+        font-size: 16px;
+        min-height: 44px;
+        -webkit-appearance: none;
+        appearance: none;
     }
 
     button.send-btn {
-        padding: 10px 12px;
+        padding: 8px;
         min-width: 44px;
         min-height: 44px;
+        flex-shrink: 0;
     }
 
     /* Profile Section in Sidebar */
@@ -351,12 +432,16 @@ button.send-btn:hover {
     .channel-item {
         padding: 12px;
         font-size: 0.95rem;
+        min-height: 44px;
+        display: flex;
+        align-items: center;
     }
 
     /* Online Users */
     .online-users {
         max-height: 150px;
         overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
     }
 
     /* Close button in sidebar */
@@ -370,16 +455,42 @@ button.send-btn:hover {
         color: var(--text-secondary);
         font-size: 1.5rem;
         cursor: pointer;
-        padding: 5px;
+        padding: 8px;
+        min-width: 44px;
+        min-height: 44px;
+        z-index: 1001;
+    }
+
+    /* Login Container Mobile */
+    .login-container {
+        width: 95%;
+        max-width: 100%;
+        padding: 1.5rem;
+        max-height: 100vh;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
     }
 }
 
 /* Extra small devices */
 @media (max-width: 480px) {
+    body {
+        height: 100vh;
+        height: 100dvh;
+    }
+
+    #app-container {
+        width: 100%;
+        height: 100%;
+    }
+
     .login-container {
         width: 95%;
         padding: 1.5rem;
         margin: 10px;
+        max-height: 100vh;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
     }
 
     .login-container h2 {
@@ -388,13 +499,19 @@ button.send-btn:hover {
     }
 
     .login-form input {
-        padding: 10px 12px;
+        padding: 12px;
         font-size: 16px;
+        -webkit-appearance: none;
+        appearance: none;
+        min-height: 44px;
     }
 
     .login-btn, .google-btn {
-        padding: 10px;
-        font-size: 0.9rem;
+        padding: 12px;
+        font-size: 0.95rem;
+        min-height: 44px;
+        -webkit-appearance: none;
+        appearance: none;
     }
 
     .message {
@@ -403,6 +520,25 @@ button.send-btn:hover {
 
     .chat-header {
         font-size: 0.9rem;
+        min-height: 50px;
+    }
+
+    .sidebar {
+        width: 260px;
+        left: -260px;
+    }
+
+    .sidebar.open {
+        left: 0;
+    }
+
+    .chat-input-area {
+        min-height: 50px;
+    }
+
+    .online-user {
+        min-height: 40px;
+        padding: 8px 10px;
     }
 }
 
@@ -420,6 +556,60 @@ button.send-btn:hover {
         width: 250px;
     }
 }
+
+/* Compatibility fixes for older Android devices */
+@media (max-width: 480px) and (hover: none) {
+    /* Android devices with touch - remove hover effects that don't work well */
+    button:hover {
+        opacity: 0.8;
+    }
+    
+    .channel-item:hover {
+        background-color: var(--bg-tertiary);
+    }
+}
+
+/* Fix for notched phones (iPhone X and similar) */
+@supports (padding: max(0px)) {
+    body {
+        padding-left: max(1rem, env(safe-area-inset-left));
+        padding-right: max(1rem, env(safe-area-inset-right));
+    }
+    
+    @media (max-width: 768px) {
+        .sidebar {
+            padding-left: max(1rem, env(safe-area-inset-left));
+            padding-right: max(1rem, env(safe-area-inset-right));
+        }
+        
+        .chat-input-area {
+            padding-bottom: max(1rem, env(safe-area-inset-bottom));
+        }
+    }
+}
+
+/* Prevent double-tap zoom */
+input, button, select, textarea {
+    -webkit-touch-callout: none;
+}
+
+/* Ensure text inputs don't zoom on focus (iOS) */
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    textarea {
+        font-size: 16px !important;
+    }
+}
+
+/* Fix for browsers that don't support 100dvh */
+@supports not (height: 100dvh) {
+    html, body {
+        height: 100%;
+    }
+}
+
 /* Logout Button */
 .logout-form {
     display: inline-block;
@@ -433,7 +623,14 @@ button.send-btn:hover {
     cursor: pointer;
     font-size: 1.2rem;
     transition: color 0.3s;
-    padding: 0;
+    padding: 8px;
+    min-width: 44px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    -webkit-user-select: none;
+    user-select: none;
 }
 
 .logout-btn:hover {
@@ -513,6 +710,10 @@ button.send-btn:hover {
     align-items: center;
     justify-content: center;
     transition: background-color 0.2s;
+    font-size: 0.95rem;
+    min-height: 44px;
+    -webkit-appearance: none;
+    appearance: none;
 }
 
 .google-btn:hover {

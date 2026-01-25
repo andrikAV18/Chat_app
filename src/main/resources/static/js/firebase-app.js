@@ -249,19 +249,45 @@ function toggleAuthForm(e) {
 // ==================== MOBILE SIDEBAR FUNCTIONS ====================
 
 function openSidebar() {
-    if (sidebar) sidebar.classList.add('open');
-    if (sidebarOverlay) sidebarOverlay.classList.add('active');
+    if (sidebar) {
+        sidebar.classList.add('open');
+        sidebar.style.display = 'block';
+    }
+    if (sidebarOverlay) {
+        sidebarOverlay.classList.add('active');
+        sidebarOverlay.style.display = 'block';
+    }
     document.body.style.overflow = 'hidden';
 }
 
 function closeSidebar() {
-    if (sidebar) sidebar.classList.remove('open');
-    if (sidebarOverlay) sidebarOverlay.classList.remove('active');
+    if (sidebar) {
+        sidebar.classList.remove('open');
+        setTimeout(function() {
+            if (sidebar && !sidebar.classList.contains('open')) {
+                sidebar.style.display = '';
+            }
+        }, 300);
+    }
+    if (sidebarOverlay) {
+        sidebarOverlay.classList.remove('active');
+        setTimeout(function() {
+            if (sidebarOverlay && !sidebarOverlay.classList.contains('active')) {
+                sidebarOverlay.style.display = '';
+            }
+        }, 300);
+    }
     document.body.style.overflow = '';
 }
 
 function isMobile() {
-    return window.innerWidth <= 768;
+    // More robust mobile detection for older devices
+    var userAgent = navigator.userAgent || '';
+    var isAndroid = /android/i.test(userAgent);
+    var isIOS = /iphone|ipad|ipod/i.test(userAgent);
+    var isSmallScreen = window.innerWidth <= 768;
+    
+    return isSmallScreen || isAndroid || isIOS;
 }
 
 // ==================== CHAT FUNCTIONS ====================
