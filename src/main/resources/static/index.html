@@ -55,7 +55,13 @@
 
     <!-- Chat Container (hidden by default) -->
     <div id="app-container" style="display: none;">
-        <div class="sidebar">
+        <!-- Mobile Sidebar Overlay -->
+        <div class="sidebar-overlay" id="sidebar-overlay"></div>
+        
+        <div class="sidebar" id="sidebar">
+            <!-- Close button for mobile -->
+            <button class="sidebar-close" id="sidebar-close" style="display: none;">✕</button>
+            
             <div class="profile-section">
                 <img class="avatar" id="current-user-avatar" src="" alt="Avatar">
                 <div class="user-info">
@@ -78,6 +84,8 @@
 
         <div class="chat-area">
             <div class="chat-header">
+                <!-- Mobile Menu Button -->
+                <button class="menu-btn" id="menu-btn" style="display: none;">☰</button>
                 <span id="channel-name"># General</span>
                 <span class="status-dot online"></span>
             </div>

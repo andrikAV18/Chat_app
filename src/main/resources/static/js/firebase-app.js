@@ -8,6 +8,7 @@ let isLoginMode = true;
 // DOM Elements (will be initialized after DOM is ready)
 let loginContainer, appContainer, loginForm, registerForm, messageBox;
 let messageContainer, messageInput, channelNameEl, currentUsernameEl, currentUserAvatarEl, onlineUsersList;
+let sidebar, sidebarOverlay, menuBtn, sidebarClose;
 
 // Wait for DOM to be ready
 document.addEventListener('DOMContentLoaded', () => {
@@ -23,6 +24,12 @@ document.addEventListener('DOMContentLoaded', () => {
     currentUsernameEl = document.getElementById('current-username');
     currentUserAvatarEl = document.getElementById('current-user-avatar');
     onlineUsersList = document.getElementById('online-users-list');
+    
+    // Mobile sidebar elements
+    sidebar = document.getElementById('sidebar');
+    sidebarOverlay = document.getElementById('sidebar-overlay');
+    menuBtn = document.getElementById('menu-btn');
+    sidebarClose = document.getElementById('sidebar-close');
 
     // Initialize the app
     initializeApp();
@@ -192,6 +199,23 @@ function initializeApp() {
         }
     });
 
+    // ==================== MOBILE SIDEBAR ====================
+    
+    // Open sidebar
+    if (menuBtn) {
+        menuBtn.addEventListener('click', openSidebar);
+    }
+    
+    // Close sidebar
+    if (sidebarClose) {
+        sidebarClose.addEventListener('click', closeSidebar);
+    }
+    
+    // Close sidebar when clicking overlay
+    if (sidebarOverlay) {
+        sidebarOverlay.addEventListener('click', closeSidebar);
+    }
+
     console.log('Firebase Chat App initialized');
 }
 
@@ -215,6 +239,24 @@ function toggleAuthForm(e) {
     
     // Re-attach event listener to new element
     document.getElementById('show-register').addEventListener('click', toggleAuthForm);
+}
+
+// ==================== MOBILE SIDEBAR FUNCTIONS ====================
+
+function openSidebar() {
+    if (sidebar) sidebar.classList.add('open');
+    if (sidebarOverlay) sidebarOverlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeSidebar() {
+    if (sidebar) sidebar.classList.remove('open');
+    if (sidebarOverlay) sidebarOverlay.classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+function isMobile() {
+    return window.innerWidth <= 768;
 }
 
 // ==================== CHAT FUNCTIONS ====================
@@ -350,6 +392,10 @@ function displayMessage(message) {
 function switchChannel(channelId) {
     if (currentChannel !== channelId) {
         subscribeToChannel(channelId);
+    }
+    // Close sidebar on mobile after selecting channel
+    if (isMobile()) {
+        closeSidebar();
     }
 }
 
