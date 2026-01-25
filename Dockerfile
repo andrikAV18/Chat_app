@@ -10,4 +10,8 @@ FROM eclipse-temurin:21-jre
 WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
 EXPOSE 8080
+
+# Default to render profile for cloud deployment
+ENV SPRING_PROFILES_ACTIVE=${SPRING_PROFILES_ACTIVE:-render}
+
 ENTRYPOINT ["java", "-jar", "app.jar"]
