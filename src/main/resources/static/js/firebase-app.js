@@ -74,8 +74,24 @@ function initializeApp() {
         try {
             showMessage('Signing in...', 'info');
             
-            // Generate the internal email from username
-            const email = `${username.toLowerCase()}@deepchat.app`;
+            // First, look up the user's email from Firestore by username
+            const usersSnapshot = await db.collection('users')
+                .where('usernameLower', '==', username.toLowerCase())
+                .limit(1)
+                .get();
+            
+            if (usersSnapshot.empty) {
+                showMessage('Username not found. Please check and try again.', 'error');
+                return;
+            }
+            
+            const userData = usersSnapshot.docs[0].data();
+            const email = userData.email;
+            
+            if (!email) {
+                showMessage('Account error. Please contact support.', 'error');
+                return;
+            }
             
             await auth.signInWithEmailAndPassword(email, password);
             showMessage('Welcome back!', 'success');
@@ -85,7 +101,7 @@ function initializeApp() {
         }
     });
 
-    // Email/Password Registration with duplicate username check
+    // Username/Password Registration with duplicate username check
     registerForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const username = document.getElementById('register-username').value.trim();
@@ -139,10 +155,15 @@ function initializeApp() {
 
             showMessage('Creating account...', 'info');
             
-            // Generate email from username (internal use only)
-            const generatedEmail = `${username.toLowerCase()}@deepchat.app`;
+            // Generate a unique email using username + random suffix
+            const randomSuffix = Math.random().toString(36).substring(2, 8);
+            const generatedEmail = `${username.toLowerCase()}.${randomSuffix}@chat-app-12d1b.firebaseapp.com`;
+            
+            console.log('Creating account with email:', generatedEmail);
             
             const userCredential = await auth.createUserWithEmailAndPassword(generatedEmail, password);
+            
+            console.log('Account created, updating profile...');
             
             // Update profile with username
             await userCredential.user.updateProfile({
@@ -150,18 +171,24 @@ function initializeApp() {
                 photoURL: `https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=random`
             });
 
-            // Create user document in Firestore
+            console.log('Profile updated, creating Firestore document...');
+
+            // Create user document in Firestore - STORE THE EMAIL for login lookup
             await db.collection('users').doc(userCredential.user.uid).set({
                 username: username,
                 usernameLower: username.toLowerCase(),
+                email: generatedEmail,  // Store email for login lookup
                 avatarUrl: `https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=random`,
                 status: 'online',
                 createdAt: firebase.firestore.FieldValue.serverTimestamp()
             });
 
-            showMessage('Account created successfully!', 'success');
+            console.log('Registration complete!');
+            showMessage('Account created successfully! Welcome!', 'success');
         } catch (error) {
             console.error('Registration error:', error);
+            console.error('Error code:', error.code);
+            console.error('Error message:', error.message);
             showMessage(getErrorMessage(error), 'error');
         }
     });
@@ -177,8 +204,10 @@ function initializeApp() {
             // Check if user exists in Firestore, if not create
             const userDoc = await db.collection('users').doc(result.user.uid).get();
             if (!userDoc.exists) {
+                const displayName = result.user.displayName || 'User';
                 await db.collection('users').doc(result.user.uid).set({
-                    username: result.user.displayName || 'User',
+                    username: displayName,
+                    usernameLower: displayName.toLowerCase().replace(/\s+/g, '_'),
                     email: result.user.email,
                     avatarUrl: result.user.photoURL || `https://ui-avatars.com/api/?name=User&background=random`,
                     status: 'online',
