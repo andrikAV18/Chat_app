@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deep Chat</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+</head>
+
+<body>
+    <div id="app-container">
+        <div class="sidebar">
+            <div class="profile-section">
+                <div class="avatar" id="current-user-avatar"></div>
+                <div class="user-info">
+                    <div class="username" id="current-username">Loading...</div>
+                    <span class="user-status">Online</span>
+                </div>
+                <form action="/logout" method="post" class="logout-form">
+                    <button type="submit" class="logout-btn" title="Logout (Sign out)">⏻</button>
+                </form>
+            </div>
+            <div class="channels-list">
+                <h3>Channels</h3>
+                <div class="channel-item active" onclick="switchChannel('general')"># General</div>
+                <div class="channel-item" onclick="switchChannel('random')"># Random</div>
+                <div class="channel-item" onclick="switchChannel('dev')"># Dev</div>
+            </div>
+        </div>
+
+        <div class="chat-area">
+            <div class="chat-header">
+                <span id="channel-name"># General</span>
+                <span class="status-dot online"></span>
+            </div>
+
+            <div class="chat-messages" id="message-container">
+                <!-- Messages will be injected here -->
+            </div>
+
+            <div class="chat-input-area">
+                <input type="text" id="message-input" placeholder="Type a message...">
+                <button class="send-btn" onclick="sendMessage()">➤</button>
+            </div>
+        </div>
+    </div>
+    <script src="js/main.js"></script>
+</body>
+
+</html>

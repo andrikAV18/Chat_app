@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Deep Chat</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div class="login-container">
+        <h2>Deep Chat</h2>
+        <div id="message-box"></div>
+        <form class="login-form" action="/login" method="post">
+            <input type="text" name="username" placeholder="Username" required autocomplete="off">
+            <input type="password" name="password" placeholder="Password" required>
+            <button type="submit" class="login-btn">Enter Chat</button>
+        </form>
+        <p style="margin-top: 10px; font-size: 0.8rem; color: #888;">
+            Try: <strong>admin/admin</strong> or <strong>user/user</strong> <br>
+            Don't have an account? <a href="/register.html"
+                style="color: var(--primary-light); text-decoration: none;">Register here</a>
+        </p>
+        <p style="margin-top: 15px; font-size: 0.7rem; color: #666; border-top: 1px solid #333; padding-top: 10px;">
+            💡 <strong>Tip:</strong> To test multiple users, use an <em>incognito window</em> 
+            or a <em>different browser</em> for each user.
+        </p>
+    </div>
+    <script>
+        // Show messages based on URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const messageBox = document.getElementById('message-box');
+        
+        if (urlParams.has('logout')) {
+            messageBox.innerHTML = '<div class="alert alert-success">You have been logged out successfully.</div>';
+        } else if (urlParams.has('expired')) {
+            messageBox.innerHTML = '<div class="alert alert-warning">Your session has expired. Please log in again.</div>';
+        } else if (urlParams.has('error')) {
+            messageBox.innerHTML = '<div class="alert alert-error">Invalid username or password.</div>';
+        } else if (urlParams.has('registered')) {
+            messageBox.innerHTML = '<div class="alert alert-success">Registration successful! Please log in.</div>';
+        }
+    </script>
+</body>
+
+</html>
