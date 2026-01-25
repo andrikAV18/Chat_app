@@ -60,13 +60,13 @@ function initializeApp() {
 
     // ==================== AUTH FUNCTIONS ====================
 
-    // Email/Password Login (supports username or email)
+    // Username/Password Login
     loginForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const usernameOrEmail = document.getElementById('login-username').value.trim();
+        const username = document.getElementById('login-username').value.trim();
         const password = document.getElementById('login-password').value;
 
-        if (!usernameOrEmail || !password) {
+        if (!username || !password) {
             showMessage('Please fill in all fields', 'error');
             return;
         }
@@ -74,23 +74,8 @@ function initializeApp() {
         try {
             showMessage('Signing in...', 'info');
             
-            let email = usernameOrEmail;
-            
-            // Check if input is not an email (username login)
-            if (!usernameOrEmail.includes('@')) {
-                // Look up email by username
-                const usersSnapshot = await db.collection('users')
-                    .where('username', '==', usernameOrEmail)
-                    .limit(1)
-                    .get();
-                
-                if (usersSnapshot.empty) {
-                    showMessage('No account found with this username', 'error');
-                    return;
-                }
-                
-                email = usersSnapshot.docs[0].data().email;
-            }
+            // Generate the internal email from username
+            const email = `${username.toLowerCase()}@deepchat.app`;
             
             await auth.signInWithEmailAndPassword(email, password);
             showMessage('Welcome back!', 'success');
@@ -104,10 +89,10 @@ function initializeApp() {
     registerForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const username = document.getElementById('register-username').value.trim();
-        const email = document.getElementById('register-email').value.trim();
         const password = document.getElementById('register-password').value;
+        const confirmPassword = document.getElementById('register-confirm-password').value;
 
-        if (!username || !email || !password) {
+        if (!username || !password || !confirmPassword) {
             showMessage('Please fill in all fields', 'error');
             return;
         }
@@ -115,6 +100,11 @@ function initializeApp() {
         // Validate username format
         if (username.length < 3) {
             showMessage('Username must be at least 3 characters', 'error');
+            return;
+        }
+
+        if (username.length > 20) {
+            showMessage('Username must be 20 characters or less', 'error');
             return;
         }
 
@@ -128,21 +118,15 @@ function initializeApp() {
             return;
         }
 
+        if (password !== confirmPassword) {
+            showMessage('Passwords do not match', 'error');
+            return;
+        }
+
         try {
             showMessage('Checking username availability...', 'info');
             
-            // Check if username already exists
-            const existingUser = await db.collection('users')
-                .where('username', '==', username)
-                .limit(1)
-                .get();
-            
-            if (!existingUser.empty) {
-                showMessage('Username is already taken. Please choose another.', 'error');
-                return;
-            }
-            
-            // Also check case-insensitive (optional - for stricter uniqueness)
+            // Check if username already exists (case-insensitive)
             const existingUserLower = await db.collection('users')
                 .where('usernameLower', '==', username.toLowerCase())
                 .limit(1)
@@ -154,7 +138,11 @@ function initializeApp() {
             }
 
             showMessage('Creating account...', 'info');
-            const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+            
+            // Generate email from username (internal use only)
+            const generatedEmail = `${username.toLowerCase()}@deepchat.app`;
+            
+            const userCredential = await auth.createUserWithEmailAndPassword(generatedEmail, password);
             
             // Update profile with username
             await userCredential.user.updateProfile({
@@ -162,11 +150,10 @@ function initializeApp() {
                 photoURL: `https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=random`
             });
 
-            // Create user document in Firestore with lowercase username for case-insensitive lookup
+            // Create user document in Firestore
             await db.collection('users').doc(userCredential.user.uid).set({
                 username: username,
                 usernameLower: username.toLowerCase(),
-                email: email,
                 avatarUrl: `https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=random`,
                 status: 'online',
                 createdAt: firebase.firestore.FieldValue.serverTimestamp()
