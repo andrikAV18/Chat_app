@@ -60,19 +60,38 @@ function initializeApp() {
 
     // ==================== AUTH FUNCTIONS ====================
 
-    // Email/Password Login
+    // Email/Password Login (supports username or email)
     loginForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const email = document.getElementById('login-email').value.trim();
+        const usernameOrEmail = document.getElementById('login-username').value.trim();
         const password = document.getElementById('login-password').value;
 
-        if (!email || !password) {
+        if (!usernameOrEmail || !password) {
             showMessage('Please fill in all fields', 'error');
             return;
         }
 
         try {
             showMessage('Signing in...', 'info');
+            
+            let email = usernameOrEmail;
+            
+            // Check if input is not an email (username login)
+            if (!usernameOrEmail.includes('@')) {
+                // Look up email by username
+                const usersSnapshot = await db.collection('users')
+                    .where('username', '==', usernameOrEmail)
+                    .limit(1)
+                    .get();
+                
+                if (usersSnapshot.empty) {
+                    showMessage('No account found with this username', 'error');
+                    return;
+                }
+                
+                email = usersSnapshot.docs[0].data().email;
+            }
+            
             await auth.signInWithEmailAndPassword(email, password);
             showMessage('Welcome back!', 'success');
         } catch (error) {
@@ -81,7 +100,7 @@ function initializeApp() {
         }
     });
 
-    // Email/Password Registration
+    // Email/Password Registration with duplicate username check
     registerForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const username = document.getElementById('register-username').value.trim();
@@ -93,12 +112,47 @@ function initializeApp() {
             return;
         }
 
+        // Validate username format
+        if (username.length < 3) {
+            showMessage('Username must be at least 3 characters', 'error');
+            return;
+        }
+
+        if (!/^[a-zA-Z0-9_]+$/.test(username)) {
+            showMessage('Username can only contain letters, numbers, and underscores', 'error');
+            return;
+        }
+
         if (password.length < 6) {
             showMessage('Password must be at least 6 characters', 'error');
             return;
         }
 
         try {
+            showMessage('Checking username availability...', 'info');
+            
+            // Check if username already exists
+            const existingUser = await db.collection('users')
+                .where('username', '==', username)
+                .limit(1)
+                .get();
+            
+            if (!existingUser.empty) {
+                showMessage('Username is already taken. Please choose another.', 'error');
+                return;
+            }
+            
+            // Also check case-insensitive (optional - for stricter uniqueness)
+            const existingUserLower = await db.collection('users')
+                .where('usernameLower', '==', username.toLowerCase())
+                .limit(1)
+                .get();
+            
+            if (!existingUserLower.empty) {
+                showMessage('Username is already taken. Please choose another.', 'error');
+                return;
+            }
+
             showMessage('Creating account...', 'info');
             const userCredential = await auth.createUserWithEmailAndPassword(email, password);
             
@@ -108,9 +162,10 @@ function initializeApp() {
                 photoURL: `https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=random`
             });
 
-            // Create user document in Firestore
+            // Create user document in Firestore with lowercase username for case-insensitive lookup
             await db.collection('users').doc(userCredential.user.uid).set({
                 username: username,
+                usernameLower: username.toLowerCase(),
                 email: email,
                 avatarUrl: `https://ui-avatars.com/api/?name=${encodeURIComponent(username)}&background=random`,
                 status: 'online',
